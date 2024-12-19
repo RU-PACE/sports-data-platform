@@ -74,22 +74,40 @@ A comprehensive sports data application built with FastAPI and MySQL, allowing f
 ## Database Diagram
 
 ```mermaid
-Sport (1) ──────── (∞) TournamentType
-    id                  id
-    name                sport_id (FK)
-                        gender
-                        format
+erDiagram
+	TournamentType ||--o{ Sport : references
+	Tournament ||--o{ TournamentType : references
+	Stat ||--o{ Tournament : references
 
-TournamentType (1) ──────── (∞) Tournament
-    id                        id
-    sport_id (FK)             tournament_type_id (FK)
-                               tournament_id
-                               host, venue, etc.
+	Sport {
+		INT id
+		VARCHAR(50) name
+	}
 
-Tournament (1) ──────── (∞) Stat
-    id                        id
-    tournament_id (FK)        key
-                               value
+	TournamentType {
+		INT id
+		INT sport_id
+		VARCHAR(10) gender
+		VARCHAR(50) format
+	}
 
+	Tournament {
+		INT id
+		INT tournament_type_id
+		VARCHAR(50) tournament_id
+		VARCHAR(50) host
+		VARCHAR(100) venue
+		VARCHAR(50) winner
+		VARCHAR(50) runner_up
+		VARCHAR(100) player_of_the_match
+	}
+
+	Stat {
+		INT id
+		INT tournament_id
+		VARCHAR(50) key
+		VARCHAR(100) value
+	}
 ```
+
 
