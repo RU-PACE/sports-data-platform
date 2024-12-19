@@ -3,7 +3,7 @@ A comprehensive sports data application built with FastAPI and MySQL, allowing f
 
 # ER Diagram
 
-# Untitled Diagram documentation
+# ER Diagram documentation
 ## Summary
 
 - [Introduction](#introduction)
@@ -18,9 +18,12 @@ A comprehensive sports data application built with FastAPI and MySQL, allowing f
 
 ## Introduction
 
+It is a database schema using SQLAlchemy for managing sports data. It organizes relationships between sports, tournament types, tournaments, and stats. Below is a breakdown of the classes and relationships
+
+
 ## Database type
 
-- **Database system:** Generic
+- **Database system:** Generic : It is not designed for a specific application or domain. Instead, it provides a flexible framework that can be adapted to various data storage and retrieval needs.
 ## Table structure
 
 ### Sport
