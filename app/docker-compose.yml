@@ -1,0 +1,33 @@
+version: '3.9'
+
+services:
+  mysql:
+    image: mysql:9.1.0
+    container_name: mysql_container
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: test
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  fastapi:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fastapi_container
+    image: sports-data-platform:latest
+    depends_on:
+      - mysql
+    environment:
+      DATABASE_URL: "mysql+pymysql://root:password@mysql:3306/test"
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    command: ["/app/wait-for-db.sh", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+
+volumes:
+  mysql_data:

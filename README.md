@@ -1,7 +1,5 @@
-# sports-data-platform
+# Sports-Data-Platform
 A comprehensive sports data application built with FastAPI and MySQL, allowing for CRUD operations and data ingestion via CSV files
-
-# ER Diagram
 
 # ER Diagram documentation
 ## Summary
@@ -23,7 +21,8 @@ It is a database schema using SQLAlchemy for managing sports data. It organizes 
 
 ## Database type
 
-- **Database system:** Generic : It is not designed for a specific application or domain. Instead, it provides a flexible framework that can be adapted to various data storage and retrieval needs.
+- **Database system:** Generic
+It is not designed for a specific application or domain. Instead, it provides a flexible framework that can be adapted to various data storage and retrieval needs.
 ## Table structure
 
 ### Sport
