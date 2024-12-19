@@ -8,6 +8,7 @@ from sqlalchemy import and_
 import csv
 from database import SessionLocal, engine ,Base
 from models import Sport, TournamentType, Tournament, Stat
+from schemas import SportEnum , GenderEnum , FormatEnum
 # from crud import create_sport, create_tournament, add_stat, query_stats, upsert_tournament, delete_record , query_s
 from utils import parse_csv
 
@@ -100,24 +101,6 @@ def upload_csv(file: UploadFile = File(...), db: Session = Depends(get_db)):
         db.rollback()
         return {"error": f"An error occurred: {str(e)}"}
     
-# Enums for selection options
-class SportEnum(str, Enum):
-    cricket = "Cricket"
-    football = "Football"
-    basketball = "Basketball"
-    hockey = "Hockey"
-    cric = "Footb"
-
-class GenderEnum(str, Enum):
-    men = "Men"
-    women = "Women"
-    mixed = "Mixed"
-
-class FormatEnum(str, Enum):
-    t20 = "T20"
-    oneday = "OneDay"
-    test = "Test"
-    worldcup = "WorldCup"
 
 @app.get("/tournaments/")
 def get_tournament_details(

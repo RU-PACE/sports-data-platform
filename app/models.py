@@ -46,22 +46,3 @@ class Stat(Base):
     key = Column(String(50), nullable=False)  # goals_scored, runs_scored
     value = Column(String(100), nullable=False)
     tournament = relationship("Tournament", back_populates="stats")
-
-
-# Schema definitions
-class StatsSchema(BaseModel):
-    runs: Optional[int] = None
-    goals: Optional[int] = None
-    points: Optional[int] = None
-
-class TournamentSchema(BaseModel):
-    sport_id: int
-    sport_name: Optional[str] = None
-    tournament_id: str
-    format: str
-    host: str
-    venue: str
-    winner: str
-    runner_up: str
-    player_of_the_match: str
-    stats: Optional[Dict[str, int]] = None

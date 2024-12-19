@@ -1,22 +1,19 @@
-# from sqlalchemy import create_engine
-# from sqlalchemy.ext.declarative import declarative_base
-# from sqlalchemy.orm import sessionmaker
-# import os
-# from dotenv import load_dotenv
+from sqlalchemy import create_engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+import os
+from dotenv import load_dotenv
 
-# load_dotenv()
+load_dotenv()
 
-# DATABASE_URL = os.getenv("DATABASE_URL")
-# print(DATABASE_URL)
+DATABASE_URL = os.getenv("DATABASE_URL")
 
-# # Define the base class for models
-# # Base = declarative_base()
+engine = create_engine(DATABASE_URL)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+Base = declarative_base()
 
-# # # Define a sample User model
-# # class User(Base):
-# #     __tablename__ = 'users'
-# #     id = Column(Integer, primary_key=True, autoincrement=True)
-# #     name = Column(String(255), nullable=False)
+
+
 
 # # Create a connection and session
 # def main():
@@ -43,18 +40,3 @@
 
 # if __name__ == "__main__":
 #     main()
-
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
-import os
-
-from dotenv import load_dotenv
-
-load_dotenv()
-
-DATABASE_URL = os.getenv("DATABASE_URL")
-
-engine = create_engine(DATABASE_URL)
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-Base = declarative_base()

@@ -6,3 +6,4 @@ cryptography==44.0.0
 fastapi==0.115.6
 python-multipart==0.0.19
 typing_extensions==4.12.2
+uvicorn==0.34.0
