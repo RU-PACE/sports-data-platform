@@ -14,47 +14,53 @@ pipeline {
         }
         stage('Test Docker Compose') {
             steps {
-                sh 'docker-compose --version || docker compose version'
+                dir('app') { // Navigate to the app folder
+                    sh 'docker-compose --version || docker compose version'
+                }
             }
         }
         stage('Build Docker Images') {
             steps {
-                script {
-                    sh 'docker-compose build'
+                dir('app') { // Navigate to the app folder
+                    sh 'docker compose build'
                 }
             }
         }
         stage('Run Docker Compose') {
             steps {
-                script {
-                    sh 'docker-compose up -d'
+                dir('app') { // Navigate to the app folder
+                    sh 'docker compose up -d'
                 }
             }
         }
         stage('Push Docker Image') {
             steps {
-                script {
-                    def imageTag = "${env.BUILD_NUMBER}"  // Generate unique tag
-                    sh "docker tag sports-data-platform:latest ${DOCKER_IMAGE}:${imageTag}"
-                    sh "docker tag sports-data-platform:latest ${DOCKER_IMAGE}:latest"
+                dir('app') { // Ensure the context is correct for tagging images
+                    script {
+                        def imageTag = "${env.BUILD_NUMBER}"  // Generate unique tag
+                        sh "docker tag sports-data-platform:latest ${DOCKER_IMAGE}:${imageTag}"
+                        sh "docker tag sports-data-platform:latest ${DOCKER_IMAGE}:latest"
 
-                    // Login to Docker Hub
-                    withCredentials([usernamePassword(credentialsId: "${DOCKER_CREDENTIALS}",
-                                                     usernameVariable: 'DOCKER_USER',
-                                                     passwordVariable: 'DOCKER_PASS')]) {
-                        sh "echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin"
+                        // Login to Docker Hub
+                        withCredentials([usernamePassword(credentialsId: "${DOCKER_CREDENTIALS}",
+                                                         usernameVariable: 'DOCKER_USER',
+                                                         passwordVariable: 'DOCKER_PASS')]) {
+                            sh "echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin"
+                        }
+
+                        // Push both tags
+                        sh "docker push ${DOCKER_IMAGE}:${imageTag}"
+                        sh "docker push ${DOCKER_IMAGE}:latest"
                     }
-
-                    // Push both tags
-                    sh "docker push ${DOCKER_IMAGE}:${imageTag}"
-                    sh "docker push ${DOCKER_IMAGE}:latest"
                 }
             }
         }
     }
     post {
         always {
-            sh 'docker-compose down'  // Bring down services
+            dir('app') { // Ensure we are in the correct folder to bring services down
+                sh 'docker compose down'  // Bring down services
+            }
         }
     }
 }
