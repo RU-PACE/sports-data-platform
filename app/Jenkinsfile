@@ -12,10 +12,15 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/RU-PACE/sports-data-platform.git'
             }
         }
+        stage('Test Docker Compose') {
+            steps {
+                sh 'docker-compose --version || docker compose version'
+            }
+        }
         stage('Build Docker Images') {
             steps {
                 script {
-                    sh 'docker-compose build'
+                    sh 'docker compose build'
                 }
             }
         }
