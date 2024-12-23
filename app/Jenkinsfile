@@ -1,0 +1,55 @@
+pipeline {
+    agent any
+    environment {
+        DOCKER_HUB_USERNAME = 'rupeshkr'                     // Your Docker Hub username
+        DOCKER_REPOSITORY = 'sports-data-platform'           // Your repository name
+        DOCKER_IMAGE = "${DOCKER_HUB_USERNAME}/${DOCKER_REPOSITORY}"
+        DOCKER_CREDENTIALS = 'docker-hub-credentials-id'     // Credentials ID added in Jenkins
+    }
+    stages {
+        stage('Clone Repository') {
+            steps {
+                git branch: 'main', url: 'https://github.com/RU-PACE/sports-data-platform.git'
+            }
+        }
+        stage('Build Docker Images') {
+            steps {
+                script {
+                    sh 'docker-compose build'
+                }
+            }
+        }
+        stage('Run Docker Compose') {
+            steps {
+                script {
+                    sh 'docker-compose up -d'
+                }
+            }
+        }
+        stage('Push Docker Image') {
+            steps {
+                script {
+                    def imageTag = "${env.BUILD_NUMBER}"  // Generate unique tag
+                    sh "docker tag sports-data-platform:latest ${DOCKER_IMAGE}:${imageTag}"
+                    sh "docker tag sports-data-platform:latest ${DOCKER_IMAGE}:latest"
+
+                    // Login to Docker Hub
+                    withCredentials([usernamePassword(credentialsId: "${DOCKER_CREDENTIALS}",
+                                                     usernameVariable: 'DOCKER_USER',
+                                                     passwordVariable: 'DOCKER_PASS')]) {
+                        sh "echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin"
+                    }
+
+                    // Push both tags
+                    sh "docker push ${DOCKER_IMAGE}:${imageTag}"
+                    sh "docker push ${DOCKER_IMAGE}:latest"
+                }
+            }
+        }
+    }
+    post {
+        always {
+            sh 'docker-compose down'  // Bring down services
+        }
+    }
+}
