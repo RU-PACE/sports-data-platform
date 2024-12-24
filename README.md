@@ -1,5 +1,5 @@
 # Sports-Data-Platform
-A comprehensive sports data application built with FastAPI and MySQL, allowing for CRUD operations and data ingestion via CSV files
+A comprehensive sports data application aims to be a comprehensive platform for managing various sports, their leagues, major tournaments, and historical data regarding winners, built with FastAPI and MySQL, allowing for CRUD operations and data ingestion via CSV files.
 
 <img src="./data/Project_Diagram.drawio.svg">
 
