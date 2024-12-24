@@ -259,10 +259,194 @@ If you face issues with Docker Hub authentication, make sure you're logged into 
 docker login
 ```
 
+Here is a rule set for handling pull requests and a corresponding `README.md` file to guide contributors on how to create and review pull requests effectively.
+
+---
+
+## Pull Request Rule Set
+
+#### 1. **General Guidelines**
+- Each pull request (PR) should be tied to an issue or a specific task.
+- Ensure that the PR title clearly describes the change.
+- Include a detailed description of the changes in the PR body.
+- Break large changes into smaller, logical PRs.
+
+#### 2. **Branch Naming**
+- Use descriptive branch names to indicate the purpose of the changes.
+  Examples:
+  - `feature/add-login-api`
+  - `bugfix/fix-db-connection`
+  - `chore/update-docs`
+
+#### 3. **Commit Messages**
+- Write clear and concise commit messages.
+  Examples:
+  - ✅ **Add user authentication API**
+  - ✅ **Fix timeout issue in DB connection**
+  - ❌ **Fix stuff**
+- Use the imperative mood (e.g., "Add" instead of "Added" or "Adds").
+
+#### 4. **Code Review Process**
+- All PRs must be reviewed and approved first.
+- Ensure code is properly linted and follows good coding standards.
+- Include relevant tests (unit, integration, or end-to-end) for new or updated functionality , currently it does not have tests .
+- Verify that all checks (CI/CD pipeline) pass before merging.
+
+#### 5. **Testing Requirements**
+- Run all tests locally and ensure they pass before creating a PR.
+- Add new tests for any newly implemented features or bug fixes.
+- Ensure high test coverage (if applicable).
+
+#### 6. **Conflict Resolution**
+- Keep the branch up-to-date with the main branch to avoid merge conflicts.
+- Resolve conflicts locally and test thoroughly before updating the PR.
+
+#### 7. **Documentation**
+- Update the documentation (e.g., `README.md`, API docs) to reflect any new features or changes.
+- Ensure any changes affecting external usage are documented clearly.
+
+#### 8. **Labels and Tags**
+- Add appropriate labels to the PR, such as:
+  - `enhancement`
+  - `bug`
+  - `documentation`
+  - `urgent`
+- Use tags like `WIP` (Work in Progress) if the PR is not ready for review.
+
+#### 9. **Merging**
+- Use **Squash and Merge** for a clean commit history.
+- Avoid merging your own PR unless explicitly allowed.
+
+#### 10. **Closing Issues**
+- Use keywords like `Fixes #123` or `Closes #123` in the PR description to automatically close the associated issue upon merging.
+
+---
+
+### `README.md` for Pull Requests
+
+```markdown
+# Pull Request Guidelines
+
+Thank you for contributing to this project! Please follow these guidelines when submitting a pull request.
+
+---
+
+## Steps to Create a Pull Request
+
+1. **Create a Branch**  
+   Create a new branch for your changes. Use a descriptive name:
+   ```bash
+   git checkout -b feature/add-new-api
+   ```
+
+2. **Write Code and Tests**  
+   - Implement the required changes.
+   - Add tests to validate the new functionality or bug fixes.
+   - Run tests locally to ensure everything works:
+     ```bash
+     pytest
+     ```
+
+3. **Commit Your Changes**  
+   Write clear and descriptive commit messages:
+   ```bash
+   git commit -m "Add user authentication API"
+   ```
+
+4. **Push Your Branch**  
+   Push your branch to the remote repository:
+   ```bash
+   git push origin feature/add-new-api
+   ```
+
+5. **Create a Pull Request**  
+   - Go to the GitHub repository.
+   - Click **New Pull Request** and select your branch.
+   - Add a clear title and description.
+   - Link any related issues (e.g., `Fixes #123`).
+
+---
+
+## Pull Request Review Process
+
+1. **Submit the PR**  
+   Once submitted, the CI/CD pipeline will run automatically to validate your changes.
+
+2. **Respond to Feedback**  
+   - Reviewers may request changes or provide suggestions.
+   - Update your branch as needed:
+     ```bash
+     git add .
+     git commit -m "Address review comments"
+     git push origin feature/add-new-api
+     ```
+
+3. **Get Approval**  
+   Ensure at least one reviewer approves the PR before merging.
+
+4. **Merge the PR**  
+   Once approved and CI/CD checks pass, the PR can be merged.
+
+---
+
+## Best Practices
+
+- **Keep PRs Small**: Focus on a single feature or bug fix per PR.
+- **Add Tests**: Cover your changes with appropriate tests.
+- **Write Documentation**: Update any relevant documentation.
+- **Resolve Conflicts**: Rebase or merge the main branch into your feature branch as needed:
+  ```bash
+  git fetch origin
+  git rebase origin/main
+  ```
+
+---
+
+## Labels and Tags
+
+Use appropriate labels to categorize your PR:
+- `enhancement`: For new features.
+- `bug`: For bug fixes.
+- `documentation`: For updates to documentation.
+- `urgent`: For critical changes.
+
+If your PR is not ready for review, mark it as a draft or add `[WIP]` to the title.
+
+---
+
+## Example Pull Request Template
+
+When creating a PR, use the following template:
+
+```markdown
+### Description
+Briefly describe the changes made in this PR.
+
+### Related Issues
+- Fixes #123
+- Related to #456
+
+### Testing
+- [ ] Unit tests added/updated
+- [ ] Integration tests added/updated
+- [ ] All tests pass locally
+
+### Checklist
+- [ ] Code adheres to project standards
+- [ ] Tests added/updated
+- [ ] Documentation updated
+- [ ] Ready for review
+```
+
+---
+
+
+This `README.md` file provides clear, actionable instructions for contributing to the repository, submitting pull requests, and ensuring quality and consistency in the codebase.
+
 ## Conclusion
 
 This project provides a simple setup for deploying a FastAPI backend with a MySQL database using Docker and Docker Compose. By following the steps in this README, you should be able to easily run the application on any machine.
 
 If you have any issues or suggestions, feel free to open an issue on the GitHub repository!
 
----
+
