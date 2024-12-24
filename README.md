@@ -322,50 +322,83 @@ Here is a rule set for handling pull requests and a corresponding `README.md` fi
 
 ---
 
-### `README.md` for Pull Requests
+[//]: # (### `README.md` for Pull Requests)
 
-```markdown
-# Pull Request Guidelines
+[//]: # ()
+[//]: # (```markdown)
 
-Thank you for contributing to this project! Please follow these guidelines when submitting a pull request.
+[//]: # (# Pull Request Guidelines)
 
----
+[//]: # ()
+[//]: # (Thank you for contributing to this project! Please follow these guidelines when submitting a pull request.)
 
-## Steps to Create a Pull Request
+[//]: # ()
+[//]: # (---)
 
-1. **Create a Branch**  
-   Create a new branch for your changes. Use a descriptive name:
-   ```bash
-   git checkout -b feature/add-new-api
-   ```
+[//]: # ()
+[//]: # (## Steps to Create a Pull Request)
 
-2. **Write Code and Tests**  
-   - Implement the required changes.
-   - Add tests to validate the new functionality or bug fixes.
-   - Run tests locally to ensure everything works:
-     ```bash
-     pytest
-     ```
+[//]: # ()
+[//]: # (1. **Create a Branch**  )
 
-3. **Commit Your Changes**  
-   Write clear and descriptive commit messages:
-   ```bash
-   git commit -m "Add user authentication API"
-   ```
+[//]: # (   Create a new branch for your changes. Use a descriptive name:)
 
-4. **Push Your Branch**  
-   Push your branch to the remote repository:
-   ```bash
-   git push origin feature/add-new-api
-   ```
+[//]: # (   ```bash)
 
-5. **Create a Pull Request**  
-   - Go to the GitHub repository.
-   - Click **New Pull Request** and select your branch.
-   - Add a clear title and description.
-   - Link any related issues (e.g., `Fixes #123`).
+[//]: # (   git checkout -b feature/add-new-api)
 
----
+[//]: # (   ```)
+
+[//]: # ()
+[//]: # (2. **Write Code and Tests**  )
+
+[//]: # (   - Implement the required changes.)
+
+[//]: # (   - Add tests to validate the new functionality or bug fixes.)
+
+[//]: # (   - Run tests locally to ensure everything works:)
+
+[//]: # (     ```bash)
+
+[//]: # (     pytest)
+
+[//]: # (     ```)
+
+[//]: # ()
+[//]: # (3. **Commit Your Changes**  )
+
+[//]: # (   Write clear and descriptive commit messages:)
+
+[//]: # (   ```bash)
+
+[//]: # (   git commit -m "Add user authentication API")
+
+[//]: # (   ```)
+
+[//]: # ()
+[//]: # (4. **Push Your Branch**  )
+
+[//]: # (   Push your branch to the remote repository:)
+
+[//]: # (   ```bash)
+
+[//]: # (   git push origin feature/add-new-api)
+
+[//]: # (   ```)
+
+[//]: # ()
+[//]: # (5. **Create a Pull Request**  )
+
+[//]: # (   - Go to the GitHub repository.)
+
+[//]: # (   - Click **New Pull Request** and select your branch.)
+
+[//]: # (   - Add a clear title and description.)
+
+[//]: # (   - Link any related issues &#40;e.g., `Fixes #123`&#41;.)
+
+[//]: # ()
+[//]: # (---)
 
 ## Pull Request Review Process
 
