@@ -1,74 +1,88 @@
 pipeline {
     agent any
+
     environment {
-        DOCKER_HUB_USERNAME = 'rupeshkr'                     // Docker Hub username
-        DOCKER_REPOSITORY = 'myrepo'           // Repository name
-        DOCKER_IMAGE = "${DOCKER_HUB_USERNAME}/${DOCKER_REPOSITORY}"
-        DOCKER_CREDENTIALS = 'docker-hub-credentials-id'     // Jenkins credentials ID for Docker Hub
+        DOCKER_HUB_USERNAME = 'rupeshkr'
+        DOCKER_REPOSITORY = 'myrepo'
+        DOCKER_CREDENTIALS = 'docker-hub-credentials-id'
     }
+
     stages {
         stage('Clone Repository') {
             steps {
+                echo 'Starting Clone Repository stage...'
+                
+                // Clone the repository containing the application
                 git branch: 'main', url: 'https://github.com/RU-PACE/sports-data-platform.git'
+                
+                echo 'Repository cloned successfully from https://github.com/RU-PACE/sports-data-platform.git'
             }
         }
-    stage('Test Docker Compose') {
+
+        stage('Test Docker Compose') {
             steps {
                 dir('app') { // Navigate to the app folder
+                    echo 'Testing Docker Compose installation...'
                     sh 'docker-compose --version'
-                }
-            }
-            }
-        stage('Build Docker Image') {
-            steps {
-                dir('app') {
-                    // Build the Docker image for the FastAPI service
-                    sh """
-                        docker build -t ${DOCKER_IMAGE}:latest -f Dockerfile .
-                    """
+                    echo 'Docker Compose is installed and working correctly.'
                 }
             }
         }
-        stage('Push Docker Image to Docker Hub') {
-            steps {
-                script {
-                    def imageTag = "${env.BUILD_NUMBER}"  // Generate a unique tag for the build
-                    sh "docker tag ${DOCKER_IMAGE}:latest ${DOCKER_IMAGE}:${imageTag}"
 
-                    // Login to Docker Hub
-                    withCredentials([usernamePassword(credentialsId: "${DOCKER_CREDENTIALS}",
-                                                     usernameVariable: 'DOCKER_USER',
-                                                     passwordVariable: 'DOCKER_PASS')]) {
-                        sh "echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin"
+        stage('Build and Push FastAPI Image') {
+            steps {
+                dir('app') {
+                    echo 'Entering app directory for building and pushing the image...'
+
+                    script {
+                        echo 'Logging in to Docker Hub...'
+                        withCredentials([usernamePassword(credentialsId: DOCKER_CREDENTIALS, usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                            sh 'docker login -u $USERNAME -p $PASSWORD'
+                        }
+                        echo 'Docker Hub login successful.'
+
+                        echo "Building FastAPI Docker image: ${DOCKER_HUB_USERNAME}/${DOCKER_REPOSITORY}:latest..."
+                        sh "docker build -t ${DOCKER_HUB_USERNAME}/${DOCKER_REPOSITORY}:latest ."
+                        echo "Docker image ${DOCKER_HUB_USERNAME}/${DOCKER_REPOSITORY}:latest built successfully."
+
+                        echo "Pushing Docker image ${DOCKER_HUB_USERNAME}/${DOCKER_REPOSITORY}:latest to Docker Hub..."
+                        sh "docker push ${DOCKER_HUB_USERNAME}/${DOCKER_REPOSITORY}:latest"
+                        echo "Docker image ${DOCKER_HUB_USERNAME}/${DOCKER_REPOSITORY}:latest pushed successfully."
                     }
-
-                    // Push both 'latest' and build-specific tags
-                    sh "docker push ${DOCKER_IMAGE}:${imageTag}"
-                    sh "docker push ${DOCKER_IMAGE}:latest"
                 }
             }
         }
-        stage('Deploy with Docker Compose') {
+
+        stage('Deploy Application Using Docker Compose') {
             steps {
                 dir('app') {
-                    // Update the `docker-compose.yml` file dynamically to use the Docker Hub image
-                    sh """
-                        sed -i 's|image: sports-data-platform:latest|image: ${DOCKER_IMAGE}:latest|' docker-compose.yml
-                    """
+                    echo 'Entering app directory for deployment using Docker Compose...'
 
-                    // Deploy using docker-compose
-                    sh """
-                        docker-compose down
-                        docker-compose up -d
-                    """
+                    script {
+                        echo 'Pulling the latest FastAPI Docker image...'
+                        sh 'docker-compose pull'
+                        echo 'Docker images pulled successfully.'
+
+                        echo 'Starting application containers using docker-compose...'
+                        sh 'docker-compose up -d'
+                        echo 'Application containers started successfully.'
+                    }
                 }
             }
         }
     }
+
     post {
         always {
-            // Cleanup
-            sh 'docker-compose down --remove-orphans'
+            echo 'Cleaning up unused Docker images and containers...'
+            sh 'docker system prune -f || true'
+            echo 'Cleanup process completed.'
+        }
+        success {
+            echo 'Deployment completed successfully!'
+        }
+        failure {
+            echo 'Deployment failed. Please check the logs for details.'
         }
     }
 }
