@@ -56,9 +56,13 @@ pipeline {
         stage('Deploy Application Using Docker Compose') {
             steps {
                 dir('app') {
-                    echo 'Entering app directory for deployment using Docker Compose...'
-
                     script {
+                        echo 'Logging in to Docker Hub...'
+                        withCredentials([usernamePassword(credentialsId: DOCKER_CREDENTIALS, usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                            sh 'docker login -u $USERNAME -p $PASSWORD'
+                        }
+                        echo 'Docker Hub login successful.'
+
                         echo 'Pulling the latest FastAPI Docker image...'
                         sh 'docker-compose pull'
                         echo 'Docker images pulled successfully.'
@@ -70,6 +74,7 @@ pipeline {
                 }
             }
         }
+
     }
 
     post {
