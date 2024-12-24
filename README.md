@@ -1,8 +1,8 @@
 # Sports-Data-Platform
 A comprehensive sports data application built with FastAPI and MySQL, allowing for CRUD operations and data ingestion via CSV files
 
-<img src="./data/Sports-data-platform.drawio.svg">
----
+<img src="./data/Project_Diagram.drawio.svg">
+
 # ER Diagram documentation
 ## Summary
 
