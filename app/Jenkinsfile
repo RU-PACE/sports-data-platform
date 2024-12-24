@@ -3,7 +3,7 @@ pipeline {
     environment {
         DOCKER_HUB_USERNAME = 'rupeshkr'                     // Your Docker Hub username
         DOCKER_REPOSITORY = 'sports-data-platform'           // Your repository name
-        DOCKER_IMAGE = "${DOCKER_HUB_USERNAME}/${DOCKER_REPOSITORY}"
+        DOCKER_IMAGE = "${DOCKER_REPOSITORY}"
         DOCKER_CREDENTIALS = 'docker-hub-credentials-id'     // Credentials ID added in Jenkins
     }
     stages {
