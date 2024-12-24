@@ -15,21 +15,21 @@ pipeline {
         stage('Test Docker Compose') {
             steps {
                 dir('app') { // Navigate to the app folder
-                    sh 'docker-compose --version || docker compose version'
+                    sh 'docker-compose --version'
                 }
             }
         }
         stage('Build Docker Images') {
             steps {
                 dir('app') { // Navigate to the app folder
-                    sh 'docker compose build'
+                    sh 'docker-compose build'
                 }
             }
         }
         stage('Run Docker Compose') {
             steps {
                 dir('app') { // Navigate to the app folder
-                    sh 'docker compose up -d'
+                    sh 'docker-compose up -d'
                 }
             }
         }
