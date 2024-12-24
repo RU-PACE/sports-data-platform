@@ -21,7 +21,7 @@ pipeline {
         }
         stage('Build Docker Image') {
             steps {
-                script {
+                dir('app') {
                     // Build the Docker image for the FastAPI service
                     sh """
                         docker build -t ${DOCKER_IMAGE}:latest -f Dockerfile .
@@ -31,7 +31,7 @@ pipeline {
         }
         stage('Push Docker Image to Docker Hub') {
             steps {
-                script {
+                dir('app') {
                     def imageTag = "${env.BUILD_NUMBER}"  // Generate a unique tag for the build
                     sh "docker tag ${DOCKER_IMAGE}:latest ${DOCKER_IMAGE}:${imageTag}"
 
@@ -50,7 +50,7 @@ pipeline {
         }
         stage('Deploy with Docker Compose') {
             steps {
-                script {
+                dir('app') {
                     // Update the `docker-compose.yml` file dynamically to use the Docker Hub image
                     sh """
                         sed -i 's|image: sports-data-platform:latest|image: ${DOCKER_IMAGE}:latest|' docker-compose.yml
