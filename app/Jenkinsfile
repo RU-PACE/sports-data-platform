@@ -1,10 +1,10 @@
 pipeline {
     agent any
     environment {
-        DOCKER_HUB_USERNAME = 'rupeshkr'                     // Your Docker Hub username
-        DOCKER_REPOSITORY = 'sports-data-platform'           // Your repository name
-        DOCKER_IMAGE = "${DOCKER_REPOSITORY}"
-        DOCKER_CREDENTIALS = 'docker-hub-credentials-id'     // Credentials ID added in Jenkins
+        DOCKER_HUB_USERNAME = 'rupeshkr'                     // Docker Hub username
+        DOCKER_REPOSITORY = 'myrepo'           // Repository name
+        DOCKER_IMAGE = "${DOCKER_HUB_USERNAME}/${DOCKER_REPOSITORY}"
+        DOCKER_CREDENTIALS = 'docker-hub-credentials-id'     // Jenkins credentials ID for Docker Hub
     }
     stages {
         stage('Clone Repository') {
@@ -19,48 +19,56 @@ pipeline {
                 }
             }
         }
-        stage('Build Docker Images') {
+        stage('Build Docker Image') {
             steps {
-                dir('app') { // Navigate to the app folder
-                    sh 'docker-compose build'
+                script {
+                    // Build the Docker image for the FastAPI service
+                    sh """
+                        docker build -t ${DOCKER_IMAGE}:latest -f Dockerfile .
+                    """
                 }
             }
         }
-        stage('Run Docker Compose') {
+        stage('Push Docker Image to Docker Hub') {
             steps {
-                dir('app') { // Navigate to the app folder
-                    sh 'docker-compose up -d'
-                }
-            }
-        }
-        stage('Push Docker Image') {
-            steps {
-                dir('app') { // Ensure the context is correct for tagging images
-                    script {
-                        def imageTag = "${env.BUILD_NUMBER}"  // Generate unique tag
-                        sh "docker tag sports-data-platform:latest ${DOCKER_IMAGE}:${imageTag}"
-                        sh "docker tag sports-data-platform:latest ${DOCKER_IMAGE}:latest"
+                script {
+                    def imageTag = "${env.BUILD_NUMBER}"  // Generate a unique tag for the build
+                    sh "docker tag ${DOCKER_IMAGE}:latest ${DOCKER_IMAGE}:${imageTag}"
 
-                        // Login to Docker Hub
-                        withCredentials([usernamePassword(credentialsId: "${DOCKER_CREDENTIALS}",
-                                                         usernameVariable: 'DOCKER_USER',
-                                                         passwordVariable: 'DOCKER_PASS')]) {
-                            sh "echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin"
-                        }
-
-                        // Push both tags
-                        sh "docker push ${DOCKER_HUB_USERNAME}/${DOCKER_IMAGE}:${imageTag}"
-                        sh "docker push ${DOCKER_HUB_USERNAME}/${DOCKER_IMAGE}:latest"
+                    // Login to Docker Hub
+                    withCredentials([usernamePassword(credentialsId: "${DOCKER_CREDENTIALS}",
+                                                     usernameVariable: 'DOCKER_USER',
+                                                     passwordVariable: 'DOCKER_PASS')]) {
+                        sh "echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin"
                     }
+
+                    // Push both 'latest' and build-specific tags
+                    sh "docker push ${DOCKER_IMAGE}:${imageTag}"
+                    sh "docker push ${DOCKER_IMAGE}:latest"
+                }
+            }
+        }
+        stage('Deploy with Docker Compose') {
+            steps {
+                script {
+                    // Update the `docker-compose.yml` file dynamically to use the Docker Hub image
+                    sh """
+                        sed -i 's|image: sports-data-platform:latest|image: ${DOCKER_IMAGE}:latest|' docker-compose.yml
+                    """
+
+                    // Deploy using docker-compose
+                    sh """
+                        docker-compose down
+                        docker-compose up -d
+                    """
                 }
             }
         }
     }
     post {
         always {
-            dir('app') { // Ensure we are in the correct folder to bring services down
-                sh 'docker compose down'  // Bring down services
-            }
+            // Cleanup
+            sh 'docker-compose down --remove-orphans'
         }
     }
 }
