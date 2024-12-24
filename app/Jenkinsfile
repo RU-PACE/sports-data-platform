@@ -49,8 +49,8 @@ pipeline {
                         }
 
                         // Push both tags
-                        sh "docker push ${DOCKER_IMAGE}:${imageTag}"
-                        sh "docker push ${DOCKER_IMAGE}:latest"
+                        sh "docker push ${DOCKER_HUB_USERNAME}/${DOCKER_IMAGE}:${imageTag}"
+                        sh "docker push ${DOCKER_HUB_USERNAME}/${DOCKER_IMAGE}:latest"
                     }
                 }
             }
