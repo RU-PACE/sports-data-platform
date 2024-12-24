@@ -18,7 +18,8 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: fastapi_container
-    image: sports-data-platform:latest
+    image: rupeshkr/sports-data-platform:latest  # Use the pulled image
+    # image: sports-data-platform:latest
     depends_on:
       - mysql
     environment:
