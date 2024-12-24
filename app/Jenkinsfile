@@ -12,13 +12,13 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/RU-PACE/sports-data-platform.git'
             }
         }
-        stage('Test Docker Compose') {
+    stage('Test Docker Compose') {
             steps {
                 dir('app') { // Navigate to the app folder
                     sh 'docker-compose --version'
                 }
             }
-        }
+            }
         stage('Build Docker Image') {
             steps {
                 dir('app') {
@@ -31,7 +31,7 @@ pipeline {
         }
         stage('Push Docker Image to Docker Hub') {
             steps {
-                dir('app') {
+                script {
                     def imageTag = "${env.BUILD_NUMBER}"  // Generate a unique tag for the build
                     sh "docker tag ${DOCKER_IMAGE}:latest ${DOCKER_IMAGE}:${imageTag}"
 
@@ -72,5 +72,3 @@ pipeline {
         }
     }
 }
-
-
