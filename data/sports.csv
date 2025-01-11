@@ -1,10 +1,7 @@
-sport_name,tournament_id,format,host,venue,winner,runner_up,player_of_the_match,runs,goals,points
-Cricket,T2024C001,ODI,India,Wankhede Stadium,India,Australia,Virat Kohli,120,6,89
-Football,T2024F001,League,England,Old Trafford,Man United,Liverpool,Marcus Rashford,,3,
-Basketball,T2024B001,Knockout,USA,Madison Square,Lakers,Warriors,LeBron James,,,25
-Cricket,T2024C002,T20,Australia,MCG,Australia,England,Glenn Maxwell,85,,
-Football,T2024F002,League,Spain,Camp Nou,Barcelona,Real Madrid,Lionel Messi,,2,
-Badminton,T2024BM001,Singles,India,Nehru Stadium,PV Sindhu,Tai Tzu Ying,PV Sindhu,,,21
-Cricket,T2024C003,Test,England,Lord's,England,New Zealand,Ben Stokes,185,,
-Football,T2024F003,League,Germany,Allianz Arena,Bayern Munich,Dortmund,Thomas Müller,,1,
-Basketball,T2024B002,Knockout,USA,Staples Center,Lakers,Bulls,Kobe Bryant,,,30
+sport,tournament_id,format,gender,host,venue,winner,runner_up,player_of_the_match,runs,goals,points
+Football,worldcup-2022,worldcup,Men,Qatar,Lusail Stadium,Argentina,France,Lionel Messi,,35,
+Football,worldcup-2022,worldcup,Women,Qatar,Lusail Stadium,Argentina,France,Messi,,30,
+Footb,worldcup-2025,oneday,Men,Qatar,Lusail Stadium,Argentina,France,Li,389,,
+Footb,worldcup-2025,oneday,Women,Qatar,Lusail Stadium,Argentina,France,Me,489,,
+Footb,worldcup-2025,t20,Men,Qatar,Lusail Stadium,Argentina,France,Lio,589,,
+Footb,worldcup-2025,t20,Women,Qatar,Lusail Stadium,Argentina,France,Mes,689,,
